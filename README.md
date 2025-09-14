@@ -24,8 +24,6 @@ SkyGuard is an AI/ML-based system designed to predict thunderstorms and gale for
 ### Key Achievements
 - **Perfect Classification**: Achieved 92% accuracy on test data
 - **Multiple Validated Models**: 10+ machine learning models with optimization
-- **Production Ready**: Container-ready, API-compatible deployment
-- **Comprehensive Testing**: Validated with business impact analysis
 
 ## System Architecture
 
@@ -58,7 +56,7 @@ SkyGuard System
 ## Features
 
 - **Multi-source Data Integration**: Combines radar, satellite, weather stations, and air quality data
-- **Real-time Weather Prediction**: Predicts thunderstorms and gale force winds with high accuracy
+- **Real-time Weather Prediction**: Predicts thunderstorms and gale force winds with higher Medium accuracy
 - **Early Warning System**: Provides 0-3 hour nowcasting capability
 - **RESTful API**: Standardized endpoints for integration
 - **Web-based Dashboard**: Real-time visualization and monitoring
