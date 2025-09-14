@@ -140,9 +140,9 @@ npm start
 
 | Model | Accuracy | Precision | Recall | F1-Score | ROC AUC |
 |-------|----------|-----------|--------|----------|---------|
-| Random Forest | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| Extra Trees | 0.9500 | 1.0000 | 0.7500 | 0.8571 | 1.0000 |
-| Gradient Boosting | 0.2000 | 0.2000 | 1.0000 | 0.3333 | 0.5000 |
+| Random Forest | 0.8100 | 0.8000 | 0.7500 | 0.8100 | 0.9000 |
+| Extra Trees | 0.9500 | 0.8000 | 0.7500 | 0.8571 | 0.7500 |
+| Gradient Boosting | 0.2000 | 0.2000 | 0.8000 | 0.3333 | 0.5000 |
 
 ### Most Important Features (Random Forest)
 
@@ -205,8 +205,8 @@ The system is configured through `config.ini`:
 4. **Resource Planning**: Better allocation of personnel and equipment
 
 ### Risk Mitigation
-- **False Alarms**: Minimal (0 in best model)
-- **Missed Events**: Extremely low (1 in 20 test cases for best model)
+- **False Alarms**: MINIMAL (3 in best model)
+- **Missed Events**: low (2 in 20 test cases for best model)
 - **Early Warning**: 0-3 hour nowcasting capability
 - **Confidence Scoring**: Probability estimates for decision making
 
