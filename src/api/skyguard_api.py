@@ -104,10 +104,22 @@ def preprocess_input_data(weather_data: WeatherData) -> pd.DataFrame:
     
     df = pd.DataFrame([data_dict])
     
-    # Ensure we have the right columns in the right order
+    # Map incoming feature names to expected feature names (matching the trained model)
+    feature_mapping = {
+        'reflectivity_max': 'reflectivity_max_x',
+        'reflectivity_mean': 'reflectivity_mean_x',
+        'brightness_temp_min': 'brightness_temp_min_x',
+        'motion_vector_x': 'motion_vector_x_x',
+        'motion_vector_y': 'motion_vector_y_x'
+    }
+    
+    # Rename columns
+    df = df.rename(columns=feature_mapping)
+    
+    # Ensure we have the right columns in the right order (matching the trained model)
     expected_features = [
-        'reflectivity_max', 'reflectivity_mean', 'brightness_temp_min', 
-        'motion_vector_x', 'motion_vector_y', 'temperature', 'dew_point', 
+        'reflectivity_max_x', 'reflectivity_mean_x', 'brightness_temp_min_x', 
+        'motion_vector_x_x', 'motion_vector_y_x', 'temperature', 'dew_point', 
         'pressure', 'wind_speed', 'wind_direction', 'visibility', 'rain', 
         'temperature_celsius', 'pressure_mb', 'wind_kph', 'humidity', 
         'cloud', 'visibility_km', 'uv_index', 'precip_mm', 
@@ -255,8 +267,8 @@ async def get_feature_importance(top_n: int = 10):
             raise HTTPException(status_code=500, detail="Model not loaded")
         
         expected_features = [
-            'reflectivity_max', 'reflectivity_mean', 'brightness_temp_min', 
-            'motion_vector_x', 'motion_vector_y', 'temperature', 'dew_point', 
+            'reflectivity_max_x', 'reflectivity_mean_x', 'brightness_temp_min_x', 
+            'motion_vector_x_x', 'motion_vector_y_x', 'temperature', 'dew_point', 
             'pressure', 'wind_speed', 'wind_direction', 'visibility', 'rain', 
             'temperature_celsius', 'pressure_mb', 'wind_kph', 'humidity', 
             'cloud', 'visibility_km', 'uv_index', 'precip_mm', 
