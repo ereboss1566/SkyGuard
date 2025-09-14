@@ -123,10 +123,10 @@ def predict():
         # Convert to DataFrame
         df = pd.DataFrame([weather_data])
         
-        # Expected features in the right order
+        # Expected features in the right order (matching the trained model)
         expected_features = [
-            'reflectivity_max', 'reflectivity_mean', 'brightness_temp_min', 
-            'motion_vector_x', 'motion_vector_y', 'temperature', 'dew_point', 
+            'reflectivity_max_x', 'reflectivity_mean_x', 'brightness_temp_min_x', 
+            'motion_vector_x_x', 'motion_vector_y_x', 'temperature', 'dew_point', 
             'pressure', 'wind_speed', 'wind_direction', 'visibility', 'rain', 
             'temperature_celsius', 'pressure_mb', 'wind_kph', 'humidity', 
             'cloud', 'visibility_km', 'uv_index', 'precip_mm', 
@@ -135,13 +135,25 @@ def predict():
             'air_quality_PM2.5', 'air_quality_PM10'
         ]
         
+        # Map incoming feature names to expected feature names
+        feature_mapping = {
+            'reflectivity_max': 'reflectivity_max_x',
+            'reflectivity_mean': 'reflectivity_mean_x',
+            'brightness_temp_min': 'brightness_temp_min_x',
+            'motion_vector_x': 'motion_vector_x_x',
+            'motion_vector_y': 'motion_vector_y_x'
+        }
+        
+        # Rename columns if needed
+        renamed_df = df.rename(columns=feature_mapping)
+        
         # Ensure all expected features are present
         for feature in expected_features:
-            if feature not in df.columns:
-                df[feature] = 0.0  # Default value for missing features
+            if feature not in renamed_df.columns:
+                renamed_df[feature] = 0.0  # Default value for missing features
         
         # Select only the features we need and in the right order
-        processed_data = df[expected_features].copy()
+        processed_data = renamed_df[expected_features].copy()
         
         # Handle missing values using the trained imputer
         if imputer:
@@ -199,10 +211,10 @@ def predict_with_alert():
         # Make prediction (reuse the predict function logic)
         df = pd.DataFrame([weather_data])
         
-        # Expected features in the right order
+        # Expected features in the right order (matching the trained model)
         expected_features = [
-            'reflectivity_max', 'reflectivity_mean', 'brightness_temp_min', 
-            'motion_vector_x', 'motion_vector_y', 'temperature', 'dew_point', 
+            'reflectivity_max_x', 'reflectivity_mean_x', 'brightness_temp_min_x', 
+            'motion_vector_x_x', 'motion_vector_y_x', 'temperature', 'dew_point', 
             'pressure', 'wind_speed', 'wind_direction', 'visibility', 'rain', 
             'temperature_celsius', 'pressure_mb', 'wind_kph', 'humidity', 
             'cloud', 'visibility_km', 'uv_index', 'precip_mm', 
@@ -211,13 +223,25 @@ def predict_with_alert():
             'air_quality_PM2.5', 'air_quality_PM10'
         ]
         
+        # Map incoming feature names to expected feature names
+        feature_mapping = {
+            'reflectivity_max': 'reflectivity_max_x',
+            'reflectivity_mean': 'reflectivity_mean_x',
+            'brightness_temp_min': 'brightness_temp_min_x',
+            'motion_vector_x': 'motion_vector_x_x',
+            'motion_vector_y': 'motion_vector_y_x'
+        }
+        
+        # Rename columns if needed
+        renamed_df = df.rename(columns=feature_mapping)
+        
         # Ensure all expected features are present
         for feature in expected_features:
-            if feature not in df.columns:
-                df[feature] = 0.0  # Default value for missing features
+            if feature not in renamed_df.columns:
+                renamed_df[feature] = 0.0  # Default value for missing features
         
         # Select only the features we need and in the right order
-        processed_data = df[expected_features].copy()
+        processed_data = renamed_df[expected_features].copy()
         
         # Handle missing values using the trained imputer
         if imputer:
@@ -290,10 +314,10 @@ def feature_importance():
                 "error": "Model not loaded"
             }), 500
         
-        # Expected features
+        # Expected features (matching the trained model)
         expected_features = [
-            'reflectivity_max', 'reflectivity_mean', 'brightness_temp_min', 
-            'motion_vector_x', 'motion_vector_y', 'temperature', 'dew_point', 
+            'reflectivity_max_x', 'reflectivity_mean_x', 'brightness_temp_min_x', 
+            'motion_vector_x_x', 'motion_vector_y_x', 'temperature', 'dew_point', 
             'pressure', 'wind_speed', 'wind_direction', 'visibility', 'rain', 
             'temperature_celsius', 'pressure_mb', 'wind_kph', 'humidity', 
             'cloud', 'visibility_km', 'uv_index', 'precip_mm', 
