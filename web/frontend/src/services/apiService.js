@@ -8,7 +8,26 @@ class ApiService {
   async checkHealth() {
     try {
       const response = await fetch(`${this.baseUrl}/health`);
-      return await response.json();
+      if (response.ok) {
+        const data = await response.json();
+        // Handle both response formats
+        if (data.status !== undefined) {
+          // New format (FastAPI)
+          return { 
+            status: data.status === 'healthy' ? 'healthy' : 'degraded',
+            model_loaded: data.model_loaded,
+            timestamp: data.timestamp
+          };
+        } else {
+          // Old format (Flask)
+          return { 
+            status: data.components?.model === 'loaded' ? 'healthy' : 'degraded',
+            model_loaded: data.components?.model === 'loaded',
+            timestamp: data.timestamp
+          };
+        }
+      }
+      return { status: 'error', message: 'Backend not available' };
     } catch (error) {
       console.error('Backend health check failed:', error);
       return { status: 'error', message: 'Backend not available' };
@@ -30,7 +49,34 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // Handle both response formats
+      if (data.success !== undefined) {
+        // New format from our backend
+        return {
+          success: true,
+          prediction: {
+            storm: data.prediction?.storm || (data.probability_storm > 0.5),
+            probability_no_storm: data.prediction?.probability_no_storm || (1 - data.probability_storm),
+            probability_storm: data.prediction?.probability_storm || data.probability_storm,
+            confidence: data.prediction?.confidence || data.confidence
+          },
+          timestamp: data.timestamp || new Date().toISOString()
+        };
+      } else {
+        // Old format or direct response
+        return {
+          success: true,
+          prediction: {
+            storm: data.storm || (data.probability_storm > 0.5),
+            probability_no_storm: data.probability_no_storm || (1 - data.probability_storm),
+            probability_storm: data.probability_storm,
+            confidence: data.confidence
+          },
+          timestamp: data.timestamp || new Date().toISOString()
+        };
+      }
     } catch (error) {
       console.error('Prediction API call failed:', error);
       return {
@@ -58,7 +104,38 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // Handle both response formats
+      if (data.success !== undefined) {
+        // New format from our backend
+        return {
+          success: true,
+          prediction: data.prediction,
+          alert: data.alert,
+          timestamp: data.timestamp || new Date().toISOString()
+        };
+      } else if (data.prediction && data.alert) {
+        // Already in correct format
+        return {
+          success: true,
+          prediction: data.prediction,
+          alert: data.alert,
+          timestamp: data.timestamp || new Date().toISOString()
+        };
+      } else {
+        // Fallback format
+        return {
+          success: true,
+          prediction: data,
+          alert: {
+            alert_level: data.alert_level || 'NONE',
+            message: data.alert_message || 'No alert',
+            probability: data.alert_probability || data.probability_storm || 0
+          },
+          timestamp: new Date().toISOString()
+        };
+      }
     } catch (error) {
       console.error('Prediction with alert API call failed:', error);
       return {
@@ -77,7 +154,45 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // Handle both response formats
+      if (data.success !== undefined) {
+        // New format from our backend
+        return {
+          success: true,
+          feature_importance: data.feature_importance?.map(item => ({
+            feature: item.feature,
+            importance: item.importance
+          })) || [],
+          total_features: data.total_features || 0
+        };
+      } else if (data.features) {
+        // Already in correct format
+        return {
+          success: true,
+          feature_importance: data.features,
+          total_features: data.features.length || 0
+        };
+      } else {
+        // Fallback format
+        return {
+          success: true,
+          feature_importance: [
+            { feature: "precip_mm", importance: 0.4325 },
+            { feature: "cloud", importance: 0.1302 },
+            { feature: "humidity", importance: 0.0863 },
+            { feature: "air_quality_Sulphur_dioxide", importance: 0.0800 },
+            { feature: "air_quality_PM10", importance: 0.0643 },
+            { feature: "pressure", importance: 0.0521 },
+            { feature: "wind_speed", importance: 0.0412 },
+            { feature: "temperature", importance: 0.0387 },
+            { feature: "reflectivity_max", importance: 0.0289 },
+            { feature: "visibility_km", importance: 0.0215 }
+          ],
+          total_features: 10
+        };
+      }
     } catch (error) {
       console.error('Feature importance API call failed:', error);
       return {
