@@ -79,14 +79,14 @@ def load_models():
     
     try:
         # Load the Random Forest model (best performing)
-        model_file = "models/optimized/randomforest_optimized_model.pkl"
+        model_file = "../../models/optimized/randomforest_optimized_model.pkl"
         model = joblib.load(model_file)
         
         # Load preprocessing objects
-        scaler_file = "models/optimized/scaler.pkl"
+        scaler_file = "../../models/optimized/scaler.pkl"
         scaler = joblib.load(scaler_file)
         
-        imputer_file = "models/optimized/imputer.pkl"
+        imputer_file = "../../models/optimized/imputer.pkl"
         imputer = joblib.load(imputer_file)
         
         logger.info("Successfully loaded models and preprocessing objects")
