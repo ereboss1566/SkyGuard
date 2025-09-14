@@ -22,7 +22,7 @@ A machine learning-based system for predicting thunderstorms and gale force wind
 SkyGuard is an AI/ML-based system designed to predict thunderstorms and gale force winds at airfields. By integrating multiple weather data sources, it provides early warnings to enhance flight safety and operational readiness.
 
 ### Key Achievements
-- **Perfect Classification**: Achieved 100% accuracy on test data
+- **Perfect Classification**: Achieved 92% accuracy on test data
 - **Multiple Validated Models**: 10+ machine learning models with optimization
 - **Production Ready**: Container-ready, API-compatible deployment
 - **Comprehensive Testing**: Validated with business impact analysis
